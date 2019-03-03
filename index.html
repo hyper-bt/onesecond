@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>onesecond</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-touch-events/1.0.5/jquery.mobile-events.js"></script>
+</head>
+<body id="page" class="text-center">
+    <div class="container">
+        <h1 id="question" class="word">#<h1>
+        <audio id="player">
+          <source id="media-source" src="#" type="audio/mpeg">
+        </audio>
+        <h6 id="lastTime" class="lastTime">#<h6>
+    </div>
+</body>
+<script type="text/javascript">
+
+var fileNameExtension = ".mp3";
+
+var sourceFolder = 'audio/'
+var sourceFile = [
+"ate.mp3", "drunk.mp3", "held.mp3", "rise.mp3", "sung.mp3", "became.mp3", "dug.mp3",
+"hid.mp3", "risen.mp3", "swam.mp3", "become.mp3", "eat.mp3", "hidden.mp3", "rode.mp3",
+"swear.mp3", "began.mp3", "eaten.mp3", "hide.mp3", "rose.mp3", "sweep.mp3", "begin.mp3",
+"fall.mp3", "hit.mp3", "run.mp3", "swept.mp3", "begun.mp3", "fallen.mp3", "hold.mp3",
+"rung.mp3", "swim.mp3", "bend.mp3", "fed.mp3", "hung.mp3", "said.mp3", "swore.mp3",
+"bent.mp3", "feed.mp3", "hurt.mp3", "sang.mp3", "sworn.mp3", "bit.mp3", "feel.mp3",
+"keep.mp3", "sat.mp3", "swum.mp3", "bite.mp3", "fell.mp3", "kept.mp3", "saw.mp3",
+"take.mp3", "bitten.mp3", "felt.mp3", "knew.mp3", "say.mp3", "taken.mp3", "blew.mp3",
+"fight.mp3", "know.mp3", "see.mp3", "taught.mp3", "blow.mp3", "find.mp3", "known.mp3",
+"seen.mp3", "teach.mp3", "blown.mp3", "fit.mp3", "laid.mp3", "sell.mp3", "tear.mp3",
+"bought.mp3", "flew.mp3", "lain.mp3", "send.mp3", "tell.mp3", "break.mp3", "flown.mp3",
+"lay(past).mp3", "sent.mp3", "think.mp3", "bring.mp3", "fly.mp3", "lay.mp3", "set.mp3",
+"thought.mp3", "broadcast.mp3", "forgave.mp3", "lead.mp3", "shake.mp3", "threw.mp3",
+"broke.mp3", "forget.mp3", "leave.mp3", "shaken.mp3", "throw.mp3", "broken.mp3",
+"forgive.mp3", "led.mp3", "shook.mp3", "thrown.mp3", "brought.mp3", "forgiven.mp3",
+"left.mp3", "shoot.mp3", "told.mp3", "build.mp3", "forgot.mp3", "lend.mp3", "shot.mp3",
+"took.mp3", "built.mp3", "forgotten.mp3", "lent.mp3", "shut.mp3", "tore.mp3", "buy.mp3",
+"fought.mp3", "let.mp3", "sing.mp3", "torn.mp3", "came.mp3", "found.mp3", "lie.mp3",
+"sit.mp3", "understand.mp3", "catch.mp3", "freeze.mp3", "light.mp3", "sleep.mp3",
+"understood.mp3", "choose.mp3", "froze.mp3", "lit.mp3", "slept.mp3", "upset.mp3",
+"chose.mp3", "frozen.mp3", "lose.mp3", "slid.mp3", "wake.mp3", "chosen.mp3",
+"gave.mp3", "lost.mp3", "slide.mp3", "wear.mp3", "come.mp3", "get.mp3", "made.mp3",
+"sold.mp3", "went.mp3", "cost.mp3", "give.mp3", "make.mp3", "speak.mp3", "win.mp3",
+"cought.mp3", "given.mp3", "mean.mp3", "spend.mp3", "withdraw.mp3", "cut.mp3", "go.mp3",
+"meant.mp3", "spent.mp3", "withdrawn.mp3", "did.mp3", "gone.mp3", "meet.mp3", "spoke.mp3",
+"withdrew.mp3", "dig.mp3", "got.mp3", "met.mp3", "spoken.mp3", "woke.mp3", "do.mp3",
+"gotten.mp3", "paid.mp3", "spread.mp3", "woken.mp3", "done.mp3", "grew.mp3", "pay.mp3",
+"stand.mp3", "won.mp3", "drank.mp3", "grow.mp3", "put.mp3", "steal.mp3", "wore.mp3",
+"draw.mp3", "grown.mp3", "ran.mp3", "stick.mp3", "worn.mp3", "drawn.mp3", "guit.mp3",
+"rang.mp3", "stole.mp3", "write.mp3", "drew.mp3", "had.mp3", "read(past).mp3",
+"stolen.mp3", "written.mp3", "drink.mp3", "hang.mp3", "read.mp3", "stood.mp3",
+"wrote.mp3", "drive.mp3", "have.mp3", "ridden.mp3", "strike.mp3", "driven.mp3",
+"hear.mp3", "ride.mp3", "struck.mp3", "drove.mp3", "heard.mp3", "ring.mp3", "stuck.mp3"
+];
+
+var lastTime = new Date().getTime();
+
+$("#page").on("tap",function(){
+    newQuestion();
+});
+
+// $("#page").click(function() {
+    // newQuestion();
+// });
+
+$("#page").keyup(function (e) {
+    if (e.keyCode == 13 || e.keyCode == 32) {
+        newQuestion();
+    }
+});
+
+function newQuestion() {
+    showLastTime();
+    next();
+    playMedia();
+    lastTime = new Date().getTime();
+}
+
+function showLastTime() {
+    var sec = (new Date().getTime() - lastTime);
+    $("#lastTime").text(sec + " ms");
+}
+
+function next() {
+    var mediaSourcePath = sourceFolder + sourceFile[getRandom(1, sourceFile.length)];
+    var question = mediaSourcePath.replace(sourceFolder, "").replace(fileNameExtension, "");
+
+    $("#question").text(question);
+    var audio = document.getElementById("player");
+    if (audio !== null) {
+        audio.src = mediaSourcePath;
+    }
+}
+
+function playMedia() {
+    var audio = document.getElementById("player");
+    if (audio !== null) {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.play();
+    }
+}
+
+function getRandom(aMix, aMax) {
+    return Math.floor(Math.random() * (aMax - aMix + 1)) + aMix;
+};
+
+</script>
+</html>
