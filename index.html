@@ -19,7 +19,13 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-touch-events/1.0.5/jquery.mobile-events.js"></script>
 </head>
-<body id="page" class="text-center">
+<body id="mainbody">
+<div class="panel">
+    <button class="btn btn-info btn-lg" id="mode">模式: 隨機</button>
+    <button class="btn btn-success btn-lg" id="speak">發音</button>
+    <h6 id="counter" class="counter"><h6>
+</div>
+<div id="page" class="text-center">
     <div class="container">
         <h1 id="question" class="word">#<h1>
         <audio id="player">
@@ -27,6 +33,7 @@
         </audio>
         <h6 id="lastTime" class="lastTime">#<h6>
     </div>
+</div>
 </body>
 <script type="text/javascript">
 
@@ -68,6 +75,7 @@ var sourceFile = [
 "wrote.mp3", "drive.mp3", "have.mp3", "ridden.mp3", "strike.mp3", "driven.mp3",
 "hear.mp3", "ride.mp3", "struck.mp3", "drove.mp3", "heard.mp3", "ring.mp3", "stuck.mp3"
 ];
+var noRepeatList = sourceFile.slice();
 
 var lastTime = new Date().getTime();
 var count = 0;
@@ -77,11 +85,15 @@ var errorList = [];
 var currentItem = "#";
 var pastList = [];
 
+var MODE_RANDOM = 0;
+var MODE_DONT_REPEAT = 1;
+var currentMode = MODE_RANDOM;
+
 $("#page").on("tap",function(){
     newQuestion();
 });
 
-$("#page").keyup(function (e) {
+$("#mainbody").keyup(function (e) {
     if (e.keyCode == 13 || e.keyCode == 32) {
         newQuestion();
     } else if (e.keyCode == 81) {
@@ -102,6 +114,20 @@ $("#page").keyup(function (e) {
     }
 });
 
+$("#mode").click(function() {
+    if (currentMode === MODE_RANDOM) {
+        currentMode = MODE_DONT_REPEAT;
+        $("#mode").text("模式: 不重複");
+    } else {
+        currentMode = MODE_RANDOM;
+        $("#mode").text("模式: 隨機");
+    }
+});
+
+$("#speak").click(function() {
+    playMedia();
+});
+
 function newQuestion() {
     showLastTime();
     next();
@@ -116,20 +142,38 @@ function showLastTime() {
 }
 
 function next() {
-    var index = getRandom(1, sourceFile.length);
-    index = index - 1;
-    if (index >= 0 && index < sourceFile.length) {
-        var fileName = sourceFile[index];
-        var mediaSourcePath = sourceFolder + fileName;
-        var question = mediaSourcePath.replace(sourceFolder, "").replace(fileNameExtension, "");
+    var currentSource = sourceFile;
+    if (currentMode === MODE_DONT_REPEAT) {
+        currentSource = noRepeatList;
+    }
 
-        $("#question").text(question);
-        pastList.push(fileName);
-        currentItem = fileName;
-        var audio = document.getElementById("player");
-        if (audio !== null) {
-            audio.src = mediaSourcePath;
+    if (currentSource.length > 0) {
+        var index = getRandom(1, currentSource.length);
+        index = index - 1;
+        if (index >= 0 && index < currentSource.length) {
+            var fileName = currentSource[index];
+            var mediaSourcePath = sourceFolder + fileName;
+            var question = mediaSourcePath.replace(sourceFolder, "").replace(fileNameExtension, "");
+
+            $("#question").text(question);
+            pastList.push(fileName);
+            currentItem = fileName;
+            var audio = document.getElementById("player");
+            if (audio !== null) {
+                audio.src = mediaSourcePath;
+            }
+
+            if (currentMode === MODE_DONT_REPEAT) {
+                var check = noRepeatList.indexOf(currentSource[index]);
+                if (check > -1) {
+                    noRepeatList.splice(index, 1);
+                    $("#counter").text(noRepeatList.length + "/" + sourceFile.length);
+                }
+            }
         }
+    } else {
+        $("#question").text("重新開始");
+        noRepeatList = sourceFile.slice();
     }
 }
 
